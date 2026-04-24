@@ -48,6 +48,10 @@ app.get('/', (req, res) => {
   res.send('Welcome to Forum API! Visit <a href="/api-docs">/api-docs</a> for documentation.');
 });
 
+app.get('/ping', (req, res) => {
+  res.send('pong');
+});
+
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 menit
