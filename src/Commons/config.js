@@ -4,7 +4,7 @@ import path from 'path';
 
 ('NODE_ENV:', process.env.NODE_ENV);
 
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'test' && !process.env.CI) {
   dotenv.config({
     path: path.resolve(process.cwd(), '.test.env'),
     override: true,
