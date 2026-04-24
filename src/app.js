@@ -23,7 +23,14 @@ const swaggerOptions = {
       description: 'Dokumentasi API pakai Swagger + Express',
     },
     servers: [
-      { url: 'http://localhost:3000' }
+      { 
+        url: 'https://dicoding-developakun4151-64umqljg.leapcell.dev/',
+        description: 'Production Server'
+      },
+      { 
+        url: 'http://localhost:3000',
+        description: 'Local Development'
+      }
     ],
     components: {
       securitySchemes: {
