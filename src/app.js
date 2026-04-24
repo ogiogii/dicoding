@@ -1,4 +1,5 @@
 import express from 'express';
+import { rateLimit } from 'express-rate-limit';
 import container from './Infrastructures/container.js';
 import ClientError from './Commons/exceptions/ClientError.js';
 import DomainErrorTranslator from './Commons/exceptions/DomainErrorTranslator.js';
@@ -47,6 +48,21 @@ app.get('/', (req, res) => {
   res.send('Welcome to Forum API! Visit <a href="/api-docs">/api-docs</a> for documentation.');
 });
 
+
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 menit
+  max: 90, // Batasi setiap IP ke 90 request per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req, res) => {
+    res.status(429).json({
+      status: 'fail',
+      message: 'Terlalu banyak permintaan, silakan coba lagi nanti',
+    });
+  },
+});
+
+app.use('/threads', limiter);
 
 app.use('/users', userRoutes(container));
 app.use('/authentications', authRoutes(container));
