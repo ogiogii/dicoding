@@ -1,4 +1,5 @@
 node_modules
+# package-lock.json (dihapus dari ignore agar CI lebih stabil)
 .idea
 config/database/test.json
 coverage
