@@ -26,7 +26,8 @@ const config = {
     user: process.env.PGUSER,
     password: process.env.PGPASSWORD,
     database: process.env.PGDATABASE,
-    synchronous_commit: process.env.NODE_ENV === 'test' ? 'on' : undefined,
+    ssl: process.env.PGSSL === 'true' ? { rejectUnauthorized: false } : false,
+    connectionString: process.env.DATABASE_URL,
   },
   auth: {
     accessTokenKey: process.env.ACCESS_TOKEN_KEY,
