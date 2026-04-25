@@ -9,13 +9,15 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # Ensure CI passes before deploying
-    # needs: test # Uncomment if you want to wait for CI
+    # Ensure CI passes before deploying (Mandatory for professional CD)
+    needs: test 
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Note: Leapcell usually deploys automatically on push to GitHub.
+      # This workflow acts as an additional deployment step or verification.
       - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -23,9 +25,9 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            export PATH=$PATH:~/.nvm/versions/node/v20.12.2/bin # Example path
+            export PATH=$PATH:~/.nvm/versions/node/v20.12.2/bin
             cd ~/forum-api
-            git pull origin master
+            git pull origin master || git pull origin main
             npm install --production
             npm run migrate:up
             pm2 restart forum-api || pm2 start src/server.js --name forum-api
