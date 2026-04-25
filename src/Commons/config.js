@@ -22,8 +22,10 @@ const config = {
     user: process.env.PGUSER,
     password: process.env.PGPASSWORD,
     database: process.env.PGDATABASE,
-    // Default SSL to true if not in test env, as most cloud providers require it
-    ssl: process.env.PGSSL === 'false' ? false : { rejectUnauthorized: false },
+    // SSL hanya aktif di production atau jika PGSSL=true
+    ssl: (process.env.NODE_ENV === 'production' || process.env.PGSSL === 'true') 
+      ? { rejectUnauthorized: false } 
+      : false,
     connectionString: process.env.DATABASE_URL,
   },
   auth: {
