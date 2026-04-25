@@ -7,9 +7,17 @@ const start = async () => {
     const server = await createServer(container);
     const PORT = config.app.port || 5000;
 
-    server.listen(PORT, () => {
+    const listener = server.listen(PORT, () => {
       console.log(`Server Forum API sedang berjalan di port ${PORT}`);
       console.log(`Dokumentasi tersedia di http://localhost:${PORT}/api-docs`);
+    });
+
+    // Menjaga agar proses tidak langsung keluar
+    process.on('SIGINT', () => {
+      listener.close(() => {
+        console.log('Server closed');
+        process.exit(0);
+      });
     });
   } catch (error) {
     console.error('Failed to start server:', error);

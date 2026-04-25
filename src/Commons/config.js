@@ -23,7 +23,8 @@ const config = {
     password: process.env.PGPASSWORD,
     database: process.env.PGDATABASE,
     // SSL hanya aktif di production atau jika PGSSL=true
-    ssl: (process.env.NODE_ENV === 'production' || process.env.PGSSL === 'true') 
+    // Di lingkungan CI, kita matikan SSL agar tidak conflict dengan service postgres
+    ssl: (process.env.NODE_ENV === 'production' || process.env.PGSSL === 'true') && !process.env.CI
       ? { rejectUnauthorized: false } 
       : false,
     connectionString: process.env.DATABASE_URL,
