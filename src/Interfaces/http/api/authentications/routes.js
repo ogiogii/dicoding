@@ -39,7 +39,7 @@ const routes = (handler, router) => {
  */
   router.post('/', handler.postAuthenticationHandler);
 
-/**
+  /**
  * @openapi
  * /authentications:
  *   put:
@@ -75,7 +75,7 @@ const routes = (handler, router) => {
  */
   router.put('/', handler.putAuthenticationHandler);
 
-/**
+  /**
  * @openapi
  * /authentications:
  *   delete:

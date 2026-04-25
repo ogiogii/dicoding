@@ -17,7 +17,16 @@ const UsersTableTestHelper = {
       values: [id, username, password, fullname],
     };
 
-    await pool.query(query);
+    try {
+      await pool.query(query);
+    } catch (error) {
+      if (error.code === '23505') { // duplicate key
+        // do nothing, user already exists
+      } else {
+        throw error;
+      }
+    }
+
   },
 
   async findUsersById(id) {

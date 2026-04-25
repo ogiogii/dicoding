@@ -32,9 +32,7 @@ class UserRepositoryPostgres extends UserRepository {
     };
 
     try {
-      ('[DB_INSERT]  Inserting user:', { id, username, fullname });
       const result = await this._pool.query(query);
-      ('[DB_INSERT] ✓ Success. Rows inserted:', result.rowCount);
       return new RegisteredUser({ ...result.rows[0] });
     } catch (error) {
       console.error('[DB_INSERT] ✗ Error:', error.message, 'Code:', error.code);

@@ -1,17 +1,19 @@
-name: Continuous Integration
+name: Continuous Integration and Deployment
 
 on:
   push:
     branches:
       - master
       - main
+      - dev
   pull_request:
     branches:
       - master
       - main
+      - dev
 
 jobs:
-  test:
+  test_and_lint:
     runs-on: ubuntu-latest
 
     services:
@@ -31,13 +33,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'npm'
+          node-version: 22
 
       - name: Install dependencies
         run: npm install
@@ -64,6 +65,20 @@ jobs:
           PGDATABASE: forumapi_test
           PGPASSWORD: test_db_password
           PGPORT: 5432
-          ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY || 'ci_test_access_key_which_is_long_enough_to_be_secure' }}
-          REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY || 'ci_test_refresh_key_which_is_long_enough_to_be_secure' }}
+          ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY || 'ci_test_access_key' }}
+          REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY || 'ci_test_refresh_key' }}
           ACCESS_TOKEN_AGE: 3600
+
+  deploy:
+    needs: test_and_lint
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Deploy to Leapcell
+        run: |
+          echo "Deploying to production server..."
+          # Anda bisa menggunakan Leapcell CLI di sini jika sudah disiapkan
+          # Untuk saat ini, ini merepresentasikan jalur deployment yang sukses

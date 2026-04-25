@@ -2,7 +2,7 @@ import express from 'express';
 
 const routes = (handler) => {
   const router = express.Router();
-/**
+  /**
  * @swagger
  * /users:
  *   post:

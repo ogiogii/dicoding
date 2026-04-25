@@ -1,13 +1,10 @@
-import express from 'express';
 import UsersHandler from './handler.js';
+import routes from './routes.js';
 
 const users = (container) => {
-  const router = express.Router();
   const handler = new UsersHandler(container);
 
-  router.post('/', handler.postUserHandler);
-
-  return router;
+  return routes(handler);
 };
 
 export default users;

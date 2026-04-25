@@ -2,8 +2,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-('NODE_ENV:', process.env.NODE_ENV);
-
 if (process.env.NODE_ENV === 'test' && !process.env.CI) {
   dotenv.config({
     path: path.resolve(process.cwd(), '.test.env'),
@@ -13,8 +11,6 @@ if (process.env.NODE_ENV === 'test' && !process.env.CI) {
   dotenv.config();
 }
 
-('PGDATABASE:', process.env.PGDATABASE);
-
 const config = {
   app: {
     host: process.env.HOST || 'localhost',
@@ -22,17 +18,21 @@ const config = {
   },
   database: {
     host: process.env.PGHOST,
-    port: Number(process.env.PGPORT), // Pastikan jadi angka
+    port: Number(process.env.PGPORT),
     user: process.env.PGUSER,
     password: process.env.PGPASSWORD,
     database: process.env.PGDATABASE,
-    ssl: process.env.PGSSL === 'true' ? { rejectUnauthorized: false } : false,
+    // SSL hanya aktif di production atau jika PGSSL=true
+    // Di lingkungan CI, kita matikan SSL agar tidak conflict dengan service postgres
+    ssl: (process.env.NODE_ENV === 'production' || process.env.PGSSL === 'true') && !process.env.CI
+      ? { rejectUnauthorized: false }
+      : false,
     connectionString: process.env.DATABASE_URL,
   },
   auth: {
     accessTokenKey: process.env.ACCESS_TOKEN_KEY,
     refreshTokenKey: process.env.REFRESH_TOKEN_KEY,
-    accessTokenAge: Number(process.env.ACCESS_TOKEN_AGE), // Pastikan jadi angka
+    accessTokenAge: Number(process.env.ACCESS_TOKEN_AGE),
   },
 };
 

@@ -6,7 +6,7 @@ const routes = (container) => {
   const router = express.Router();
   const handler = new CommentsHandler(container);
 
-/**
+  /**
  * @swagger
  * /threads/{threadId}/comments:
  *   post:
@@ -62,7 +62,7 @@ const routes = (container) => {
   );
 
 
-/**
+  /**
  * @swagger
  * /threads/{threadId}/comments/{commentId}:
  *   delete:

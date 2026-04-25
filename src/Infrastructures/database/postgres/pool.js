@@ -2,9 +2,6 @@
 import { Pool } from 'pg';
 import config from '../../../Commons/config.js';
 
-('Creating pool for database:', config.database.database);
-('Config database:', JSON.stringify(config.database, null, 2));
-
 // For test environment, create a new pool each time to avoid shared state issues
 let pool;
 
@@ -23,11 +20,16 @@ const poolConfig = config.database.connectionString
   };
 
 if (process.env.NODE_ENV === 'test') {
-  pool = new Pool({ ...poolConfig, max: 5 });
+  pool = new Pool({ ...poolConfig, max: 5, connectionTimeoutMillis: 5000 });
 } else {
   // Use global to ensure singleton for production
   if (!global.pgPool) {
-    global.pgPool = new Pool({ ...poolConfig, max: 5 });
+    global.pgPool = new Pool({ ...poolConfig, max: 5, connectionTimeoutMillis: 5000 });
+
+    global.pgPool.on('error', (err) => {
+      console.error('Unexpected error on idle client', err);
+      process.exit(-1);
+    });
   }
   pool = global.pgPool;
 }

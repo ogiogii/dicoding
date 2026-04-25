@@ -58,34 +58,34 @@ const buildContainer = () => {
         dependencies: [{ concrete: pool }, { concrete: nanoid }],
       },
     },
-  {
-    key: AuthenticationRepository.name,
-    Class: AuthenticationRepositoryPostgres,
-    parameter: {
-      dependencies: [{ concrete: pool }],
+    {
+      key: AuthenticationRepository.name,
+      Class: AuthenticationRepositoryPostgres,
+      parameter: {
+        dependencies: [{ concrete: pool }],
+      },
     },
-  },
-  {
-    key: PasswordHash.name,
-    Class: BcryptPasswordHash,
-    parameter: {
-      dependencies: [{ concrete: bcrypt }],
+    {
+      key: PasswordHash.name,
+      Class: BcryptPasswordHash,
+      parameter: {
+        dependencies: [{ concrete: bcrypt }],
+      },
     },
-  },
-  {
-    key: AuthenticationTokenManager.name,
-    Class: JwtTokenManager,
-    parameter: {
-      dependencies: [{ concrete: jwt }],
+    {
+      key: AuthenticationTokenManager.name,
+      Class: JwtTokenManager,
+      parameter: {
+        dependencies: [{ concrete: jwt }],
+      },
     },
-  },
-  {
-    key: ThreadRepository.name,
-    Class: ThreadRepositoryPostgres,
-    parameter: {
-      dependencies: [{ concrete: pool }, { concrete: nanoid }],
+    {
+      key: ThreadRepository.name,
+      Class: ThreadRepositoryPostgres,
+      parameter: {
+        dependencies: [{ concrete: pool }, { concrete: nanoid }],
+      },
     },
-  },
     {
       key: CommentRepository.name,
       Class: CommentRepositoryPostgres,
@@ -102,114 +102,114 @@ const buildContainer = () => {
     },
   ]);
 
-// ==================
-// REGISTER USE CASE
-// ==================
-container.register([
-  {
-    key: AddUserUseCase.name,
-    Class: AddUserUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
-        { name: 'userRepository', internal: UserRepository.name },
-        { name: 'passwordHash', internal: PasswordHash.name },
-      ],
+  // ==================
+  // REGISTER USE CASE
+  // ==================
+  container.register([
+    {
+      key: AddUserUseCase.name,
+      Class: AddUserUseCase,
+      parameter: {
+        injectType: 'destructuring',
+        dependencies: [
+          { name: 'userRepository', internal: UserRepository.name },
+          { name: 'passwordHash', internal: PasswordHash.name },
+        ],
+      },
     },
-  },
-  {
-    key: LoginUserUseCase.name,
-    Class: LoginUserUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
-        { name: 'userRepository', internal: UserRepository.name },
-        { name: 'authenticationRepository', internal: AuthenticationRepository.name },
-        { name: 'authenticationTokenManager', internal: AuthenticationTokenManager.name },
-        { name: 'passwordHash', internal: PasswordHash.name },
-      ],
+    {
+      key: LoginUserUseCase.name,
+      Class: LoginUserUseCase,
+      parameter: {
+        injectType: 'destructuring',
+        dependencies: [
+          { name: 'userRepository', internal: UserRepository.name },
+          { name: 'authenticationRepository', internal: AuthenticationRepository.name },
+          { name: 'authenticationTokenManager', internal: AuthenticationTokenManager.name },
+          { name: 'passwordHash', internal: PasswordHash.name },
+        ],
+      },
     },
-  },
-  {
-    key: LogoutUserUseCase.name,
-    Class: LogoutUserUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
-        { name: 'authenticationRepository', internal: AuthenticationRepository.name },
-      ],
+    {
+      key: LogoutUserUseCase.name,
+      Class: LogoutUserUseCase,
+      parameter: {
+        injectType: 'destructuring',
+        dependencies: [
+          { name: 'authenticationRepository', internal: AuthenticationRepository.name },
+        ],
+      },
     },
-  },
-  {
-    key: RefreshAuthenticationUseCase.name,
-    Class: RefreshAuthenticationUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
-        { name: 'authenticationRepository', internal: AuthenticationRepository.name },
-        { name: 'authenticationTokenManager', internal: AuthenticationTokenManager.name },
-      ],
+    {
+      key: RefreshAuthenticationUseCase.name,
+      Class: RefreshAuthenticationUseCase,
+      parameter: {
+        injectType: 'destructuring',
+        dependencies: [
+          { name: 'authenticationRepository', internal: AuthenticationRepository.name },
+          { name: 'authenticationTokenManager', internal: AuthenticationTokenManager.name },
+        ],
+      },
     },
-  },
-  {
-    key: AddThreadUseCase.name,
-    Class: AddThreadUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
-        { name: 'threadRepository', internal: ThreadRepository.name },
-      ],
+    {
+      key: AddThreadUseCase.name,
+      Class: AddThreadUseCase,
+      parameter: {
+        injectType: 'destructuring',
+        dependencies: [
+          { name: 'threadRepository', internal: ThreadRepository.name },
+        ],
+      },
     },
-  },
-  {
-    key: AddCommentUseCase.name,
-    Class: AddCommentUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
-        { name: 'commentRepository', internal: CommentRepository.name },
-        { name: 'threadRepository', internal: ThreadRepository.name },
-      ],
+    {
+      key: AddCommentUseCase.name,
+      Class: AddCommentUseCase,
+      parameter: {
+        injectType: 'destructuring',
+        dependencies: [
+          { name: 'commentRepository', internal: CommentRepository.name },
+          { name: 'threadRepository', internal: ThreadRepository.name },
+        ],
+      },
     },
-  },
 
-  // 🔥 DELETE COMMENT (WAJIB)
-  {
-    key: DeleteCommentUseCase.name,
-    Class: DeleteCommentUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
-        { name: 'commentRepository', internal: CommentRepository.name },
-        { name: 'threadRepository', internal: ThreadRepository.name },
-      ],
+    // 🔥 DELETE COMMENT (WAJIB)
+    {
+      key: DeleteCommentUseCase.name,
+      Class: DeleteCommentUseCase,
+      parameter: {
+        injectType: 'destructuring',
+        dependencies: [
+          { name: 'commentRepository', internal: CommentRepository.name },
+          { name: 'threadRepository', internal: ThreadRepository.name },
+        ],
+      },
     },
-  },
 
-  // 🔥 GET THREAD DETAIL (WAJIB)
-  {
-    key: GetThreadDetailUseCase.name,
-    Class: GetThreadDetailUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
-        { name: 'threadRepository', internal: ThreadRepository.name },
-      ],
+    // 🔥 GET THREAD DETAIL (WAJIB)
+    {
+      key: GetThreadDetailUseCase.name,
+      Class: GetThreadDetailUseCase,
+      parameter: {
+        injectType: 'destructuring',
+        dependencies: [
+          { name: 'threadRepository', internal: ThreadRepository.name },
+        ],
+      },
     },
-  },
-  {
-    key: ToggleCommentLikeUseCase.name,
-    Class: ToggleCommentLikeUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
-        { name: 'commentLikeRepository', internal: CommentLikeRepository.name },
-        { name: 'commentRepository', internal: CommentRepository.name },
-        { name: 'threadRepository', internal: ThreadRepository.name },
-      ],
+    {
+      key: ToggleCommentLikeUseCase.name,
+      Class: ToggleCommentLikeUseCase,
+      parameter: {
+        injectType: 'destructuring',
+        dependencies: [
+          { name: 'commentLikeRepository', internal: CommentLikeRepository.name },
+          { name: 'commentRepository', internal: CommentRepository.name },
+          { name: 'threadRepository', internal: ThreadRepository.name },
+        ],
+      },
     },
-  },
-]);
+  ]);
 
   return container;
 };
