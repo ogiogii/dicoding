@@ -24,11 +24,11 @@ const createServer = async (container) => {
         description: 'Dokumentasi API pakai Swagger + Express',
       },
       servers: [
-        { 
-          url: '/', 
-          description: 'Production Server (Relative Path)' 
+        {
+          url: '/',
+          description: 'Production Server (Relative Path)'
         },
-        { 
+        {
           url: `http://localhost:${config.app.port}`,
           description: 'Local Development'
         }
@@ -43,7 +43,7 @@ const createServer = async (container) => {
         },
       },
     },
-    apis: ['./src/Interfaces/http/api/**/routes.js'] 
+    apis: ['./src/Interfaces/http/api/**/routes.js']
   };
   const openapiSpecification = swaggerJsDoc(swaggerOptions);
 
@@ -68,7 +68,7 @@ const createServer = async (container) => {
 
   // 🔥 ROUTES
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
-  
+
   app.get('/ping', (req, res) => {
     res.send('pong');
   });
@@ -101,7 +101,6 @@ const createServer = async (container) => {
     return res.status(500).json({
       status: 'error',
       message: 'terjadi kegagalan pada server kami',
-      debug: error.message, // ❗ TEMPORARY FOR DEBUGGING
     });
   });
 

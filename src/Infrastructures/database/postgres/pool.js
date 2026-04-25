@@ -25,7 +25,7 @@ if (process.env.NODE_ENV === 'test') {
   // Use global to ensure singleton for production
   if (!global.pgPool) {
     global.pgPool = new Pool({ ...poolConfig, max: 5, connectionTimeoutMillis: 5000 });
-    
+
     global.pgPool.on('error', (err) => {
       console.error('Unexpected error on idle client', err);
       process.exit(-1);

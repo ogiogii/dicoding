@@ -26,7 +26,7 @@ async function testLogin() {
     ('Register Body:', JSON.stringify(registerRes.body, null, 2));
 
     // Wait a bit
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     // Login
     ('\n=== LOGIN ATTEMPT ===');

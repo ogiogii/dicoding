@@ -1,6 +1,7 @@
 /**
  * @type {import('node-pg-migrate').ColumnDefinitions | undefined}
  */
+/* eslint-disable camelcase */
 export const shorthands = undefined;
 
 /**

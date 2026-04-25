@@ -51,7 +51,7 @@ const routes = (handler, router, container) => {
 
 
   // GET thread detail (tidak perlu login)
-/**
+  /**
  * @swagger
  * /threads/{threadId}:
  *   get:
