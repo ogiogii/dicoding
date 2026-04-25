@@ -25,8 +25,8 @@ const createServer = async (container) => {
       },
       servers: [
         { 
-          url: 'https://dicoding-developakun4151-64umqljg.leapcell.dev',
-          description: 'Production Server'
+          url: '/', 
+          description: 'Production Server (Relative Path)' 
         },
         { 
           url: `http://localhost:${config.app.port}`,
@@ -48,18 +48,7 @@ const createServer = async (container) => {
   const openapiSpecification = swaggerJsDoc(swaggerOptions);
 
   // 🔥 MIDDLEWARES
-  app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    
-    // Handle Preflight
-    if (req.method === 'OPTIONS') {
-      return res.status(200).send();
-    }
-    next();
-  });
-
+  app.use(cors());
   app.use(express.json());
 
   // 🔥 LIMIT ACCESS (Rate Limiting)
