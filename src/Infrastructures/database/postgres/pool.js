@@ -2,9 +2,6 @@
 import { Pool } from 'pg';
 import config from '../../../Commons/config.js';
 
-('Creating pool for database:', config.database.database);
-('Config database:', JSON.stringify(config.database, null, 2));
-
 // For test environment, create a new pool each time to avoid shared state issues
 let pool;
 

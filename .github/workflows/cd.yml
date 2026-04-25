@@ -9,20 +9,23 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Ensure CI passes before deploying
+    # needs: test # Uncomment if you want to wait for CI
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Deploy to Server
+      - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            export PATH=$PATH:~/.nvm/versions/node/v20.12.2/bin # Example path
             cd ~/forum-api
             git pull origin master
-            npm install
+            npm install --production
             npm run migrate:up
-            pm2 restart forum-api
+            pm2 restart forum-api || pm2 start src/server.js --name forum-api

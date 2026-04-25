@@ -10,7 +10,7 @@ import commentRoutes from './Interfaces/http/api/comments/routes.js';
 import userRoutes from './Interfaces/http/api/users/index.js';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-
+import config from './Commons/config.js';
 
 const app = express();
 
@@ -28,7 +28,7 @@ const swaggerOptions = {
         description: 'Production Server'
       },
       { 
-        url: 'http://localhost:3000',
+        url: `http://localhost:${config.app.port}`,
         description: 'Local Development'
       }
     ],
@@ -47,24 +47,22 @@ const swaggerOptions = {
 
 const openapiSpecification = swaggerJsDoc(swaggerOptions);
 
-
 app.use(express.json());
+
+// Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 
-app.get('/', (req, res) => {
-  res.send('Welcome to Forum API! Visit <a href="/api-docs">/api-docs</a> for documentation.');
-});
-
+// Ping
 app.get('/ping', (req, res) => {
   res.send('pong');
 });
 
-
+// 🔥 LIMIT ACCESS (Rate Limiting)
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 menit
   max: 90, // Batasi setiap IP ke 90 request per windowMs
-  standardHeaders: true,
-  legacyHeaders: false,
+  standardHeaders: true, // Kembalikan rate limit info di headers `RateLimit-*`
+  legacyHeaders: false, // Matikan headers `X-RateLimit-*`
   handler: (req, res) => {
     res.status(429).json({
       status: 'fail',
@@ -73,8 +71,15 @@ const limiter = rateLimit({
   },
 });
 
+// Terapkan rate limit pada semua rute /threads (Sesuai kriteria Dicoding)
+// Namun sebaiknya diterapkan global untuk keamanan lebih baik
 app.use('/threads', limiter);
 
+app.get('/', (req, res) => {
+  res.send('Welcome to Forum API! Visit <a href="/api-docs">/api-docs</a> for documentation.');
+});
+
+// Routes
 app.use('/users', userRoutes(container));
 app.use('/authentications', authRoutes(container));
 app.use('/threads', threadRoutes(container));
@@ -92,7 +97,7 @@ app.use((error, req, res, next) => {
     });
   }
 
-  console.error(error); // Log unexpected errors for debugging
+  console.error('[SERVER_ERROR]', error); // Log unexpected errors for debugging
   return res.status(500).json({
     status: 'error',
     message: 'terjadi kegagalan pada server kami',

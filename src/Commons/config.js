@@ -2,8 +2,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-('NODE_ENV:', process.env.NODE_ENV);
-
 if (process.env.NODE_ENV === 'test' && !process.env.CI) {
   dotenv.config({
     path: path.resolve(process.cwd(), '.test.env'),
@@ -12,8 +10,6 @@ if (process.env.NODE_ENV === 'test' && !process.env.CI) {
 } else {
   dotenv.config();
 }
-
-('PGDATABASE:', process.env.PGDATABASE);
 
 const config = {
   app: {
