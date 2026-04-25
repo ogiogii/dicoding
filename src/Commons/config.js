@@ -18,17 +18,18 @@ const config = {
   },
   database: {
     host: process.env.PGHOST,
-    port: Number(process.env.PGPORT), // Pastikan jadi angka
+    port: Number(process.env.PGPORT),
     user: process.env.PGUSER,
     password: process.env.PGPASSWORD,
     database: process.env.PGDATABASE,
-    ssl: process.env.PGSSL === 'true' ? { rejectUnauthorized: false } : false,
+    // Default SSL to true if not in test env, as most cloud providers require it
+    ssl: process.env.PGSSL === 'false' ? false : { rejectUnauthorized: false },
     connectionString: process.env.DATABASE_URL,
   },
   auth: {
     accessTokenKey: process.env.ACCESS_TOKEN_KEY,
     refreshTokenKey: process.env.REFRESH_TOKEN_KEY,
-    accessTokenAge: Number(process.env.ACCESS_TOKEN_AGE), // Pastikan jadi angka
+    accessTokenAge: Number(process.env.ACCESS_TOKEN_AGE),
   },
 };
 

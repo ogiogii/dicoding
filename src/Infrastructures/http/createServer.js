@@ -98,6 +98,9 @@ const createServer = async (container) => {
   app.use((error, req, res, next) => {
     const translatedError = DomainErrorTranslator.translate(error);
 
+    // Ensure CORS headers even on error
+    res.header('Access-Control-Allow-Origin', '*');
+
     if (translatedError instanceof ClientError) {
       return res.status(translatedError.statusCode).json({
         status: 'fail',
@@ -109,6 +112,7 @@ const createServer = async (container) => {
     return res.status(500).json({
       status: 'error',
       message: 'terjadi kegagalan pada server kami',
+      debug: error.message, // ❗ TEMPORARY FOR DEBUGGING
     });
   });
 
