@@ -10,6 +10,7 @@ import commentRoutes from './Interfaces/http/api/comments/routes.js';
 import userRoutes from './Interfaces/http/api/users/index.js';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import cors from 'cors';
 import config from './Commons/config.js';
 
 const app = express();
@@ -47,6 +48,7 @@ const swaggerOptions = {
 
 const openapiSpecification = swaggerJsDoc(swaggerOptions);
 
+app.use(cors());
 app.use(express.json());
 
 // Documentation
