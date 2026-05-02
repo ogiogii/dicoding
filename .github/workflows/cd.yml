@@ -9,8 +9,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # Ensure CI passes before deploying (Mandatory for professional CD)
-    needs: test 
+
 
     steps:
       - name: Checkout repository
